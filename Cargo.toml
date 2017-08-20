@@ -1,0 +1,10 @@
+[package]
+name = "tictactoe"
+version = "0.1.0"
+authors = ["Nasreen123 <Nasreen123@users.noreply.github.com>"]
+
+
+build = "tango-build.rs"
+
+[build-dependencies.tango]
+path = "../../playing-with-tango"
