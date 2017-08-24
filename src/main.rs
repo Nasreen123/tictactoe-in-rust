@@ -4,6 +4,7 @@ use std::fmt;
 use std::io;
 
 #[derive(Copy, Clone)]
+#[derive(PartialEq, Eq)]
 enum SquareStatus {
     Naught,
     Cross,
@@ -21,7 +22,6 @@ impl Square {
         }
     }
 }
-
 impl fmt::Display for Square {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 	match self.status {
@@ -59,32 +59,73 @@ fn take_turn() -> usize {
 }
 
 
+fn has_won(sum: u32) -> bool {
+    let primes: [u32; 9] = [2, 3, 5, 7, 11, 13, 17, 19, 23];
+    let combos: [[usize; 3]; 8] = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+
+    let mut won: bool = false;
+
+    for n in 0..8 {
+        let mut win: u32 = primes[combos[n][0]] * primes[combos[n][1]] * primes[combos[n][2]];
+        if sum % win == 0 {
+            println!("You won!");
+            won = true;
+        }
+    }
+    won
+}
+
+
+fn has_lost(board: &[Square]) -> bool {
+    let mut lost: bool = true;
+    for n in 0..9 {
+        if board[n].status == SquareStatus::Empty {
+            lost = false;
+
+        }
+    }
+    if lost {
+        println!("Game over! No empty squares");
+    }
+    lost
+}
+
 fn main() {
 
     println!("Let's play tictactoe!");
+
+    let mut x: u32 = 1;
+    let mut o: u32 = 1;
+    let mut game_over: bool = false;
 
     let mut player: Player = Player::Crosses;
     //let mut board: [Square; 9] = [Square::Empty; 9];
     let mut board: [Square; 9] = [Square::new(2), Square::new(3), Square::new(5), Square::new(7), Square::new(11), Square::new(13), Square::new(17), Square::new(19), Square::new(23)];
     print_board(&board);
 
-    loop {
+    while game_over == false {
 
         let mut play: usize = take_turn();
 
         match player {
-            Player::Crosses => board[play].status = SquareStatus::Cross,
-            Player::Naughts => board[play].status = SquareStatus::Naught,
+                Player::Crosses => {
+                    board[play].status = SquareStatus::Cross;
+                    x = x * board[play].id;
+                    player = Player::Naughts;
+                },
+                Player::Naughts => {
+                    board[play].status = SquareStatus::Naught;
+                    o = o * board[play].id;
+                    player = Player::Crosses;
+                },
+            }
+
+            print_board(&board);
+            game_over = has_won(x);
+            game_over = has_won(o);
+            game_over = has_lost(&board);
         }
 
-        print_board(&board);
-
-        match player {
-            Player::Crosses => player = Player::Naughts,
-            Player::Naughts => player = Player::Crosses,
-        }
-
-    }
 
 
 
