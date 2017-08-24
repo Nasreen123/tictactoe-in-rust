@@ -4,21 +4,33 @@ use std::fmt;
 use std::io;
 
 #[derive(Copy, Clone)]
-enum Square {
+enum SquareStatus {
     Naught,
     Cross,
     Empty,
 }
-impl fmt::Display for Square {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-	match self {
-	    &Square::Cross => f.write_str("X"),
-	    &Square::Naught => f.write_str("O"),
-	    &Square::Empty => f.write_str(" "),
-	}
+struct Square {
+    status: SquareStatus,
+    id: u32,
+}
+impl Square {
+    fn new(id: u32) -> Square {
+        Square {
+            status: SquareStatus::Empty,
+            id,
+        }
     }
 }
 
+impl fmt::Display for Square {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+	match self.status {
+	    SquareStatus::Cross => f.write_str("X"),
+	    SquareStatus::Naught => f.write_str("O"),
+	    SquareStatus::Empty => f.write_str(" "),
+	}
+    }
+}
 
 #[derive(Copy, Clone)]
 enum Player {
@@ -38,27 +50,22 @@ fn print_board(board: &[Square]) {
 
 fn take_turn() -> usize {
     let mut play = String::new();
-
     io::stdin().read_line(&mut play)
         .expect("Failed to read line");
-
     let play: usize = play.trim().parse()
         .expect("Please type a number!");
-
     println!("you played: {}", play);
-
     play
 }
 
 
 fn main() {
 
-
     println!("Let's play tictactoe!");
 
     let mut player: Player = Player::Crosses;
-    let mut board: [Square; 9] = [Square::Empty; 9];
-
+    //let mut board: [Square; 9] = [Square::Empty; 9];
+    let mut board: [Square; 9] = [Square::new(2), Square::new(3), Square::new(5), Square::new(7), Square::new(11), Square::new(13), Square::new(17), Square::new(19), Square::new(23)];
     print_board(&board);
 
     loop {
@@ -66,8 +73,8 @@ fn main() {
         let mut play: usize = take_turn();
 
         match player {
-            Player::Crosses => board[play] = Square::Cross,
-            Player::Naughts => board[play] = Square::Naught,
+            Player::Crosses => board[play].status = SquareStatus::Cross,
+            Player::Naughts => board[play].status = SquareStatus::Naught,
         }
 
         print_board(&board);
