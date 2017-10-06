@@ -1,4 +1,5 @@
-//@ testing
+testing
+```rust
 #![allow(warnings)]
 #![allow(dead_code)]
 
@@ -6,9 +7,11 @@ use std::fmt;
 use std::io;
 
 use std::env;
+```
 
-//@ testing
+testing
 
+```rust
 #[derive(Copy, Clone)]
 #[derive(PartialEq, Eq)]
 enum SquareStatus {
@@ -37,12 +40,14 @@ impl fmt::Display for Square {
 	}
     }
 }
+```
 
 
-//@ enums are really useful
-//@ they are a data structure that has to be one of a set of choices
+enums are really useful
+they are a data structure that has to be one of a set of choices
 
 
+```rust
 #[derive(Copy, Clone)]
 enum Player {
     Naughts,
@@ -150,3 +155,4 @@ fn main() {
 
 
 }
+```

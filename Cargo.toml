@@ -2,9 +2,11 @@
 name = "tictactoe"
 version = "0.1.0"
 authors = ["Nasreen123 <Nasreen123@users.noreply.github.com>"]
-
-
-build = "tango-build.rs"
+build = "build.rs"
+links = "../../tango"
 
 [build-dependencies.tango]
-path = "../../playing-with-tango"
+path = "../../tango"
+
+[build-dependencies.building]
+path = "../../building"
